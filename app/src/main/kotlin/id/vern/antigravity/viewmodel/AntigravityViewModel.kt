@@ -63,6 +63,7 @@ import id.vern.antigravity.oauth.OAuthManager
 import id.vern.antigravity.oauth.AccountManager
 import id.vern.antigravity.oauth.StoredAccount
 import id.vern.antigravity.service.CoreServerService
+import id.vern.antigravity.service.ForegroundNotification
 import id.vern.antigravity.util.AppLogger
 import id.vern.antigravity.util.AppUpdateState
 import id.vern.antigravity.util.UpdateChecker
@@ -3907,6 +3908,9 @@ class AntigravityViewModel : ViewModel() {
         attachments: List<AttachedFile> = emptyList()
     ) {
         currentAiExecutionJob?.cancel()
+        val notification = ForegroundNotification.beginExecution(
+            context.getString(R.string.notification_agent_working)
+        )
         currentAiExecutionJob = viewModelScope.launch(Dispatchers.IO) {
             executionWakeLock.acquire(context, 30 * 60 * 1000L)
             mutableIsExecuting.value = true
@@ -3931,6 +3935,9 @@ class AntigravityViewModel : ViewModel() {
 
                 if (prompt.startsWith("!") || prompt.startsWith("$ ")) {
                     val cmd = if (prompt.startsWith("!")) prompt.substring(1).trim() else prompt.substring(2).trim()
+                    ForegroundNotification.updateExecution(
+                        notification, context.getString(R.string.notification_agent_command, cmd)
+                    )
                     mutableChatMessages.update { list ->
                         list.map { msg ->
                             if (msg.id == assistantMsgId) {
@@ -4024,6 +4031,7 @@ class AntigravityViewModel : ViewModel() {
                     var activeCliConvId: String? = priorCliSession
                     var lastStreamUpdateMs = 0L
                     var lastStepUpdateMs = 0L
+                    val activeNotificationSteps = linkedMapOf<String, String>()
                     var lastTranscriptPollMs = 0L
                     val authUrlRegex = "(https://accounts\\.google\\.com/o/oauth2/auth\\S+)".toRegex()
 
@@ -4318,6 +4326,7 @@ class AntigravityViewModel : ViewModel() {
                                                     }
                                                 }
 
+                                                val notificationStepId = stepUpdate.optString("step_id").ifBlank { stableStepId }
                                                 if (state == "ACTIVE") {
                                                     val toolDesc = when {
                                                         stepKind == AgentStepKind.COMMAND -> "$stepTitle"
@@ -4326,8 +4335,29 @@ class AntigravityViewModel : ViewModel() {
                                                         stepKind == AgentStepKind.SEARCH -> "Search $stepTitle"
                                                         else -> "$toolName $stepTitle"
                                                     }
+                                                    val command = if (toolName == "run_command") {
+                                                        params?.optString("CommandLine").orEmpty().trim()
+                                                    } else ""
+                                                    val notificationText = if (command.isNotBlank()) {
+                                                        context.getString(R.string.notification_agent_command, command)
+                                                    } else {
+                                                        toolDesc
+                                                    }
+                                                    synchronized<Unit>(activeNotificationSteps) {
+                                                        activeNotificationSteps.remove(notificationStepId)
+                                                        activeNotificationSteps[notificationStepId] = notificationText
+                                                        ForegroundNotification.updateExecution(notification, notificationText)
+                                                    }
                                                     TerminalSessionManager.appendAgyLine("> $toolDesc", isCommand = true)
                                                 } else {
+                                                    synchronized<Unit>(activeNotificationSteps) {
+                                                        if (activeNotificationSteps.remove(notificationStepId) != null) {
+                                                            ForegroundNotification.updateExecution(
+                                                                notification,
+                                                                activeNotificationSteps.values.lastOrNull() ?: notification.text
+                                                            )
+                                                        }
+                                                    }
                                                     if (!stepDetail.isNullOrBlank()) {
                                                         TerminalSessionManager.appendAgyLine(stepDetail)
                                                     }
@@ -4401,6 +4431,13 @@ class AntigravityViewModel : ViewModel() {
                                             } else if (stepType == "agent_response") {
                                                 val textDelta = stepUpdate.optString("text_delta", "")
                                                 if (textDelta.isNotEmpty()) {
+                                                    synchronized<Unit>(activeNotificationSteps) {
+                                                        if (activeNotificationSteps.isEmpty()) {
+                                                            ForegroundNotification.updateExecution(
+                                                                notification, context.getString(R.string.notification_agent_responding)
+                                                            )
+                                                        }
+                                                    }
                                                     outputSb.append(textDelta)
                                                     val now = System.currentTimeMillis()
                                                     if (now - lastStreamUpdateMs > 250L) {
@@ -4622,6 +4659,7 @@ class AntigravityViewModel : ViewModel() {
                     }
                 }
             } finally {
+                ForegroundNotification.endExecution(notification)
                 executionWakeLock.release()
                 mutableIsExecuting.value = false
                 mutableActiveWorkingStatus.value = null
@@ -4637,6 +4675,8 @@ class AntigravityViewModel : ViewModel() {
                 processNextQueuedMessage(context)
                 refreshUserQuota(context)
             }
+        }.also { job ->
+            job.invokeOnCompletion { ForegroundNotification.endExecution(notification) }
         }
     }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_engine_running">Motor do Antigravity ativo</string>
+    <string name="notification_agent_working">Agente em execução…</string>
+    <string name="notification_agent_command">Executando: %1$s</string>
+    <string name="notification_agent_responding">Escrevendo resposta…</string>
+</resources>

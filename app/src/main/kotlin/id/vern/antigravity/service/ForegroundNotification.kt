@@ -12,11 +12,56 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import id.vern.antigravity.R
 import id.vern.antigravity.ui.MainActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 
 object ForegroundNotification {
 
     const val NOTIFICATION_ID = 1001
     const val CHANNEL_ID = "agy_core_service_channel"
+
+    internal class Execution(val text: String)
+
+    private data class ExecutionStatus(val execution: Execution, val text: String)
+    private val executionStatuses = MutableStateFlow<List<ExecutionStatus>>(emptyList())
+
+    internal fun beginExecution(text: String): Execution {
+        val execution = Execution(text)
+        executionStatuses.update { it + ExecutionStatus(execution, text) }
+        return execution
+    }
+
+    internal fun updateExecution(execution: Execution, text: String = execution.text) {
+        executionStatuses.update { statuses ->
+            val previous = statuses.find { it.execution === execution }
+            if (previous == null || previous.text == text) return@update statuses
+            statuses.filterNot { it.execution === execution } + ExecutionStatus(execution, text)
+        }
+    }
+
+    internal fun endExecution(execution: Execution) {
+        executionStatuses.update { statuses -> statuses.filterNot { it.execution === execution } }
+    }
+
+    internal suspend fun observeExecution(service: Service) {
+        executionStatuses.map { it.lastOrNull()?.text }.distinctUntilChanged().collect { text ->
+            update(service, text)
+            // Let StateFlow keep the latest status during bursts of tool events.
+            delay(300)
+        }
+    }
+
+    internal suspend fun <T> trackCommand(context: Context, command: String, run: suspend () -> T): T {
+        val execution = beginExecution(context.getString(R.string.notification_agent_command, command))
+        try {
+            return run()
+        } finally {
+            endExecution(execution)
+        }
+    }
 
     fun start(service: Service, statusText: String? = null) {
         val manager = service.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
@@ -45,8 +90,10 @@ object ForegroundNotification {
         }
     }
 
-    fun update(context: Context, statusText: String? = null) {
-        val text = statusText ?: context.getString(R.string.notification_engine_running)
+    private fun update(context: Context, statusText: String?) {
+        val text = statusText?.let {
+            if (it.length > 400) it.take(399) + "…" else it
+        } ?: context.getString(R.string.notification_engine_running)
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
         manager?.notify(NOTIFICATION_ID, buildNotification(context, text))
     }
@@ -89,8 +136,11 @@ object ForegroundNotification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(context.getString(R.string.app_name))
             .setContentText(statusText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(statusText))
             .setSmallIcon(iconRes)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)

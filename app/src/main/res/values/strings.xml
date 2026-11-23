@@ -396,6 +396,9 @@
     <string name="notification_channel_desc">Antigravity background executor and process supervisor</string>
     <string name="notification_engine_active">Antigravity Active</string>
     <string name="notification_engine_running">Antigravity Engine Running</string>
+    <string name="notification_agent_working">Agent working…</string>
+    <string name="notification_agent_command">Running: %1$s</string>
+    <string name="notification_agent_responding">Writing response…</string>
     <string name="notification_action_stop">Stop</string>
     <string name="notification_action_restart">Restart</string>
 

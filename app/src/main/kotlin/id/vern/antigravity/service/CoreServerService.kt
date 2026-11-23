@@ -60,6 +60,9 @@ class CoreServerService : Service() {
         super.onCreate()
         Log.i(TAG, "Creating CoreServerService...")
         ForegroundNotification.start(this, getString(R.string.notification_engine_active))
+        serviceScope.launch(Dispatchers.Main.immediate) {
+            ForegroundNotification.observeExecution(this@CoreServerService)
+        }
         wakeLockHolder.acquire(this, 15_000L)
 
         gatewayServer = SystemGatewayServer(this, 45161, wakeLockHolder)
@@ -73,7 +76,6 @@ class CoreServerService : Service() {
         when (intent?.action) {
             ACTION_STOP -> {
                 Log.i(TAG, "Stop action requested")
-                dismissNotification()
                 stopSelf()
                 return START_NOT_STICKY
             }
@@ -81,10 +83,6 @@ class CoreServerService : Service() {
                 Log.i(TAG, "Restart action requested")
                 stopBackgroundDaemon()
                 startBackgroundDaemon()
-                ForegroundNotification.update(this, getString(R.string.notification_engine_running))
-            }
-            else -> {
-                ForegroundNotification.update(this, getString(R.string.notification_engine_running))
             }
         }
         return START_STICKY
@@ -94,8 +92,8 @@ class CoreServerService : Service() {
 
     override fun onDestroy() {
         Log.i(TAG, "Destroying CoreServerService...")
-        dismissNotification()
         serviceScope.cancel()
+        dismissNotification()
         stopBackgroundDaemon()
         gatewayServer?.stop()
         wakeLockHolder.release()
