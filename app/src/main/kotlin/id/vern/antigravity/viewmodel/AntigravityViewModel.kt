@@ -66,6 +66,7 @@ import id.vern.antigravity.oauth.AccountManager
 import id.vern.antigravity.oauth.StoredAccount
 import id.vern.antigravity.service.CoreServerService
 import id.vern.antigravity.service.ForegroundNotification
+import id.vern.antigravity.service.ReplyNotification
 import id.vern.antigravity.util.AppLogger
 import id.vern.antigravity.util.AppUpdateState
 import id.vern.antigravity.util.UpdateChecker
@@ -1692,6 +1693,7 @@ class AntigravityViewModel : ViewModel() {
             val currentWorkspace = workspacePath.value
             val wsDir = if (!currentWorkspace.isNullOrBlank()) File(currentWorkspace) else null
             val validWsDir = if (wsDir != null && wsDir.exists() && wsDir.isDirectory) wsDir else null
+            var completedReply: String? = null
 
             try {
 
@@ -1802,6 +1804,7 @@ class AntigravityViewModel : ViewModel() {
                     var thoughtSeq = 0
                     val authUrlRegex = "(https://accounts\\.google\\.com/o/oauth2/auth\\S+)".toRegex()
 
+                    val replySb = StringBuilder()
                     var currentTurn = 0
                     val maxAutoTurns = 8
                     var autoContinue = true
@@ -1811,6 +1814,7 @@ class AntigravityViewModel : ViewModel() {
                     while (autoContinue && currentTurn < maxAutoTurns && coroutineContext.isActive) {
                         currentTurn++
                         outputSb.clear()
+                        replySb.clear()
 
                         val args = mutableListOf<String>()
                         val currentSec = securityPreset.value.lowercase()
@@ -2232,6 +2236,7 @@ class AntigravityViewModel : ViewModel() {
                                                             )
                                                         }
                                                     }
+                                                    replySb.append(textDelta)
                                                     outputSb.append(textDelta)
                                                     val now = System.currentTimeMillis()
                                                     if (now - lastStreamUpdateMs > 200L) {
@@ -2259,6 +2264,8 @@ class AntigravityViewModel : ViewModel() {
                                         val finalResponse = resultObj?.optString("response")
                                         if (!finalResponse.isNullOrBlank()) {
                                             TerminalSessionManager.appendAgyLine(finalResponse)
+                                            replySb.clear()
+                                            replySb.append(finalResponse)
                                             outputSb.clear()
                                             outputSb.append(finalResponse)
                                             val currentOutput = outputSb.toString().trim()
@@ -2427,13 +2434,15 @@ class AntigravityViewModel : ViewModel() {
                         emptyList()
                     }
 
-                    val transcriptResponse = finalParsed.assistantResponse
+                    val replyText = replySb.toString().trim().ifBlank {
+                        finalParsed.assistantResponse.orEmpty().trim()
+                    }
                     val finalContent = if (exitCode != 0 && authRequired) {
                         context.getString(R.string.chat_auth_required_error)
                     } else if (outputSb.isNotEmpty()) {
                         outputSb.toString().trim()
-                    } else if (!transcriptResponse.isNullOrBlank()) {
-                        transcriptResponse
+                    } else if (replyText.isNotBlank()) {
+                        replyText
                     } else if (finalSteps.isNotEmpty()) {
                         val executedNames = finalSteps.filter { it.kind != AgentStepKind.THOUGHT }.map { it.title }
                         if (executedNames.isNotEmpty()) {
@@ -2469,6 +2478,9 @@ class AntigravityViewModel : ViewModel() {
                             } else msg
                         }
                     }
+                    if (exitCode == 0 && !authRequired && replyText.isNotBlank()) {
+                        completedReply = replyText
+                    }
                 }
             } catch (e: Throwable) {
                 if (e is kotlinx.coroutines.CancellationException) {
@@ -2501,7 +2513,13 @@ class AntigravityViewModel : ViewModel() {
                     list.map { if (it.id == convId) it.copy(messageCount = currentList.size, timestamp = System.currentTimeMillis()) else it }
                 }
                 saveConversationHistory(context)
-                saveMessagesForConversation(context, convId, currentList)
+                val reply = completedReply
+                if (reply != null && coroutineContext.isActive && currentList.any { it.id == assistantMsgId }) {
+                    ConversationPersistence.saveMessagesForConversation(context, convId, currentList)
+                    ReplyNotification.post(context, convId, reply)
+                } else {
+                    saveMessagesForConversation(context, convId, currentList)
+                }
                 processNextQueuedMessage(context)
                 refreshUserQuota(context)
             }

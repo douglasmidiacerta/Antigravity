@@ -7,4 +7,7 @@
     <string name="notification_agent_working">Agente em execução…</string>
     <string name="notification_agent_command">Executando: %1$s</string>
     <string name="notification_agent_responding">Escrevendo resposta…</string>
+    <string name="reply_notification_channel">Respostas do agente</string>
+    <string name="reply_notification_title">Resposta pronta</string>
+    <string name="reply_notification_fallback">Abra a conversa para ler a resposta.</string>
 </resources>

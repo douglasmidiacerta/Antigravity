@@ -42,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -80,10 +81,26 @@ enum class ActiveToolView {
 @Composable
 fun WorkspaceScreen(
     viewModel: AntigravityViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    requestedConversationId: String? = null,
+    onConversationRequestHandled: () -> Unit = {}
 ) {
     val context = LocalContext.current
     var activeView by remember { mutableStateOf(ActiveToolView.CHAT) }
+    val isExecuting by viewModel.isExecuting.collectAsStateWithLifecycle()
+
+    LaunchedEffect(requestedConversationId, isExecuting) {
+        val id = requestedConversationId ?: return@LaunchedEffect
+        if (id != viewModel.activeConversationId.value) {
+            if (isExecuting) return@LaunchedEffect
+            viewModel.conversationHistory.value.firstOrNull { it.id == id }?.let { conversation ->
+                viewModel.loadConversation(context, conversation)
+            }
+        }
+        activeView = ActiveToolView.CHAT
+        onConversationRequestHandled()
+    }
+
     val appearance by viewModel.appearanceConfig.collectAsStateWithLifecycle()
     val selectedModel by viewModel.selectedModel.collectAsStateWithLifecycle()
     val thinkingBudget by viewModel.thinkingBudget.collectAsStateWithLifecycle()

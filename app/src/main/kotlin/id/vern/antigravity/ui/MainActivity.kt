@@ -1,5 +1,6 @@
 package id.vern.antigravity.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.unit.dp
+import id.vern.antigravity.service.ReplyNotification
 import id.vern.antigravity.ui.components.DialogBlurState
 import id.vern.antigravity.ui.components.AppUpdateDialog
 import id.vern.antigravity.util.UpdateChecker
@@ -38,11 +40,19 @@ enum class AppDestination {
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        @Volatile
+        internal var isVisible = false
+            private set
+    }
+
     private val viewModel: AntigravityViewModel by viewModels()
+    private var requestedConversationId by mutableStateOf<String?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.loadPreferences(this)
+        requestedConversationId = ReplyNotification.conversationId(intent)
         enableEdgeToEdge()
 
         setContent {
@@ -97,7 +107,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             AppDestination.WORKSPACE -> {
-                                WorkspaceScreen(viewModel = viewModel)
+                                WorkspaceScreen(
+                                    viewModel = viewModel,
+                                    requestedConversationId = requestedConversationId,
+                                    onConversationRequestHandled = {
+                                        requestedConversationId = null
+                                        ReplyNotification.clearConversation(intent)
+                                    }
+                                )
                             }
                         }
                     }
@@ -115,6 +132,23 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val conversationId = ReplyNotification.conversationId(intent) ?: return
+        setIntent(intent)
+        requestedConversationId = conversationId
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isVisible = true
+    }
+
+    override fun onStop() {
+        isVisible = false
+        super.onStop()
     }
 
     override fun onResume() {

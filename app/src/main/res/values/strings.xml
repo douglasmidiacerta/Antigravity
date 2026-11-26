@@ -399,6 +399,9 @@
     <string name="notification_agent_working">Agent working…</string>
     <string name="notification_agent_command">Running: %1$s</string>
     <string name="notification_agent_responding">Writing response…</string>
+    <string name="reply_notification_channel">Agent replies</string>
+    <string name="reply_notification_title">Reply ready</string>
+    <string name="reply_notification_fallback">Open the conversation to read the reply.</string>
     <string name="notification_action_stop">Stop</string>
     <string name="notification_action_restart">Restart</string>
 
