@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Antigravity</string>
+    <string name="app_name">Antigravity Douglas</string>
     <string name="app_tagline">Google Antigravity for Android</string>
 
     <string name="splash_subtitle">Autonomous AI Agent for Android</string>
@@ -163,7 +163,7 @@
 
     <string name="settings_about_title">About</string>
     <string name="settings_about_subtitle">App version, repository, contributors, and architecture.</string>
-    <string name="about_app_name">Antigravity for Android</string>
+    <string name="about_app_name">Antigravity Douglas for Android</string>
     <string name="about_version">App Version %s</string>
     <string name="about_repo_header">GitHub Repository</string>
     <string name="about_contributors_header">Contributors &amp; References</string>
@@ -214,7 +214,7 @@
     <string name="dev_userspace_engine_title">Userspace &amp; Background Engine</string>
     <string name="dev_userspace_prefix_title">Linux Userspace Prefix</string>
     <string name="dev_core_service_title">Core Service &amp; agy-daemon</string>
-    <string name="dev_core_service_desc">Listening on 127.0.0.1:45158 &amp; 45161</string>
+    <string name="dev_core_service_desc">Local gateway on 127.0.0.1:45261</string>
     <string name="dev_btn_stop_core_service">Stop</string>
     <string name="dev_btn_start_core_service">Start</string>
     <string name="dev_btn_restart_core_service">Restart</string>

@@ -20,6 +20,7 @@ if (localPropsFile.exists()) {
         System.getenv("ANDROID_SDK_ROOT"),
         "/data/user/0/com.agy/files/android-sdk",
         "/data/user/0/id.vern.antigravity/files/android-sdk",
+        "/data/user/0/id.vern.agydouglas/files/android-sdk",
         "${System.getProperty("user.home")}/android-sdk",
         "/storage/emulated/0/Android/sdk",
         "/storage/emulated/0/android-sdk",

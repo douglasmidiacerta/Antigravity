@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Antigravity</string>
+    <string name="app_name">Antigravity Douglas</string>
     <string name="app_tagline">Google Antigravity untuk Android</string>
 
     <string name="splash_subtitle">Agen AI Otonom untuk Android</string>
@@ -163,7 +163,7 @@
 
     <string name="settings_about_title">Tentang</string>
     <string name="settings_about_subtitle">Versi aplikasi, repositori, kontributor, dan arsitektur.</string>
-    <string name="about_app_name">Antigravity untuk Android</string>
+    <string name="about_app_name">Antigravity Douglas untuk Android</string>
     <string name="about_version">Versi Aplikasi %s</string>
     <string name="about_repo_header">Repositori GitHub</string>
     <string name="about_contributors_header">Kontributor &amp; Referensi</string>
@@ -214,7 +214,7 @@
     <string name="dev_userspace_engine_title">Userspace &amp; Background Engine</string>
     <string name="dev_userspace_prefix_title">Awalan Linux Userspace</string>
     <string name="dev_core_service_title">Core Service &amp; agy-daemon</string>
-    <string name="dev_core_service_desc">Mendengarkan di 127.0.0.1:45158 &amp; 45161</string>
+    <string name="dev_core_service_desc">Gateway lokal di 127.0.0.1:45261</string>
     <string name="dev_btn_stop_core_service">Stop</string>
     <string name="dev_btn_start_core_service">Mulai</string>
     <string name="dev_btn_restart_core_service">Restart</string>

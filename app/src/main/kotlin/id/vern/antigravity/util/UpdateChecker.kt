@@ -30,8 +30,9 @@ class UpdateChecker(private val context: Context) {
     companion object {
         const val OTA_NOTIFICATION_CHANNEL_ID = "ota_updates_channel"
         const val OTA_NOTIFICATION_ID = 1009
-        const val GITHUB_OWNER = "KuatoDev"
+        const val GITHUB_OWNER = "douglasmidiacerta"
         const val GITHUB_REPO = "Antigravity"
+        const val APK_ASSET_PREFIX = "Antigravity-Douglas-"
     }
 
     private fun fetchGitHubApi(apiUrl: String): Pair<Int, String?> {
@@ -98,7 +99,7 @@ class UpdateChecker(private val context: Context) {
             for (i in 0 until assets.length()) {
                 val asset = assets.getJSONObject(i)
                 val name = asset.optString("name", "")
-                if (name.endsWith(".apk", ignoreCase = true)) {
+                if (name.startsWith(APK_ASSET_PREFIX, ignoreCase = true) && name.endsWith(".apk", ignoreCase = true)) {
                     val assetApiUrl = asset.optString("url")
                     val browserDownloadUrl = asset.optString("browser_download_url")
                     downloadUrl = if (browserDownloadUrl.isNotBlank()) browserDownloadUrl else assetApiUrl

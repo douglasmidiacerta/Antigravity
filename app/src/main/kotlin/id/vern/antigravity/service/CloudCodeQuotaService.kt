@@ -3,6 +3,7 @@ package id.vern.antigravity.service
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import id.vern.antigravity.BuildConfig
 import id.vern.antigravity.data.AvailableModelInfo
 import id.vern.antigravity.data.CodeAssistTier
 import id.vern.antigravity.data.ModelAvailability
@@ -188,6 +189,9 @@ object CloudCodeQuotaService {
     }
 
     private fun getCandidateEndpoints(context: Context? = null): List<Pair<Int, String>> {
+        // A parallel installation must not discover the original app's local session.
+        // Its quota requests use the account authenticated in this app instead.
+        if (BuildConfig.PARALLEL_INSTALL) return emptyList()
         val list = mutableListOf<Pair<Int, String>>()
 
         val candidatePorts = listOf(45157, 45158, 45159, 45160)

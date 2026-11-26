@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import id.vern.antigravity.BuildConfig
 import id.vern.antigravity.util.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -43,7 +44,7 @@ object OAuthManager {
     const val CLI_TOKEN_FILE_NAME = "antigravity-oauth-token"
     const val JETSKI_TOKEN_FILE_NAME = "jetski-standalone-oauth-token"
     const val TOKEN_FILE_NAME = CLI_TOKEN_FILE_NAME
-    const val CALLBACK_PORT = 8085
+    const val CALLBACK_PORT = BuildConfig.OAUTH_CALLBACK_PORT
     const val JETSKI_STATE_CONTENT = """post_onboarding:  {
   completed_steps:  POST_ONBOARDING_STEP_TYPE_MANAGER_WELCOME
   completed_steps:  POST_ONBOARDING_STEP_TYPE_USAGE_MODE
@@ -658,6 +659,8 @@ migrations:  {
     ): String {
         val safeEmail = (email ?: "").replace("<", "&lt;").replace(">", "&gt;").trim()
         val logoB64 = getLogoBase64(context)
+        val appScheme = context.getString(id.vern.antigravity.R.string.oauth_scheme)
+        val appPackage = context.packageName
 
         return """
 <!DOCTYPE html>
@@ -746,17 +749,17 @@ migrations:  {
   <div class="card">
     ${if (logoB64.isNotEmpty()) """<img src="data:image/png;base64,$logoB64" alt="Antigravity" class="logo-img">""" else ""}
     <h2>Login Authenticated</h2>
-    <p class="description">Press button to open Antigravity for Android by Vern.</p>
+    <p class="description">Press the button to return to Antigravity Douglas.</p>
     ${if (safeEmail.isNotEmpty()) """<div class="email-badge">$safeEmail</div>""" else ""}
-    <a href="antigravity://open" class="btn-open" onclick="openApp(event)">Open Antigravity</a>
+    <a href="$appScheme://open" class="btn-open" onclick="openApp(event)">Open Antigravity Douglas</a>
   </div>
 
   <script>
     function openApp(e) {
       if (e) e.preventDefault();
-      window.location.href = "antigravity://open";
+      window.location.href = "$appScheme://open";
       setTimeout(function() {
-        window.location.href = "intent://open#Intent;scheme=antigravity;package=id.vern.antigravity;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end";
+        window.location.href = "intent://open#Intent;scheme=$appScheme;package=$appPackage;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end";
       }, 300);
     }
     setTimeout(function() {
@@ -781,7 +784,7 @@ migrations:  {
         try {
             serverSocket = ServerSocket().apply {
                 reuseAddress = true
-                bind(java.net.InetSocketAddress("0.0.0.0", CALLBACK_PORT))
+                bind(java.net.InetSocketAddress("127.0.0.1", CALLBACK_PORT))
             }
             activeServerSocket = serverSocket
 

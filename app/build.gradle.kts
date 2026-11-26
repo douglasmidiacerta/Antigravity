@@ -22,7 +22,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "id.vern.antigravity"
+        applicationId = "id.vern.agydouglas"
         minSdk = 26
         targetSdk = 28
         versionCode = 2
@@ -32,8 +32,10 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("int", "GATEWAY_PORT", "45161")
+        buildConfigField("int", "GATEWAY_PORT", "45261")
         buildConfigField("int", "CORE_PORT", "45158")
+        buildConfigField("int", "OAUTH_CALLBACK_PORT", "18085")
+        buildConfigField("boolean", "PARALLEL_INSTALL", "true")
     }
 
     compileOptions {

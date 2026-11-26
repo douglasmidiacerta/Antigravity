@@ -2,6 +2,7 @@ package id.vern.antigravity.data
 
 import android.net.Uri
 import androidx.annotation.StringRes
+import id.vern.antigravity.BuildConfig
 import id.vern.antigravity.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -177,8 +178,8 @@ data class ExecutionLogEntry(
 data class EngineStatus(
     val isRunning: Boolean = false,
     val pid: Int = -1,
-    val httpsPort: Int = 45158,
-    val gatewayPort: Int = 45161,
+    val httpsPort: Int = BuildConfig.CORE_PORT,
+    val gatewayPort: Int = BuildConfig.GATEWAY_PORT,
     val csrfToken: String = "",
     val serverUrl: String? = null,
     val daemonRunning: Boolean = false

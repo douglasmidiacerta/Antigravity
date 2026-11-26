@@ -8,6 +8,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import id.vern.antigravity.BuildConfig
 import id.vern.antigravity.R
 import id.vern.antigravity.gateway.SystemGatewayServer
 import id.vern.antigravity.util.AppLogger
@@ -24,9 +25,9 @@ class CoreServerService : Service() {
 
     companion object {
         private const val TAG = "CoreServerService"
-        const val ACTION_START = "id.vern.antigravity.action.START"
-        const val ACTION_STOP = "id.vern.antigravity.action.STOP"
-        const val ACTION_RESTART = "id.vern.antigravity.action.RESTART"
+        const val ACTION_START = BuildConfig.APPLICATION_ID + ".action.START"
+        const val ACTION_STOP = BuildConfig.APPLICATION_ID + ".action.STOP"
+        const val ACTION_RESTART = BuildConfig.APPLICATION_ID + ".action.RESTART"
 
         fun startService(context: Context) {
             val intent = Intent(context, CoreServerService::class.java).apply {
@@ -65,11 +66,11 @@ class CoreServerService : Service() {
         }
         wakeLockHolder.acquire(this, 15_000L)
 
-        gatewayServer = SystemGatewayServer(this, 45161, wakeLockHolder)
+        gatewayServer = SystemGatewayServer(this, BuildConfig.GATEWAY_PORT, wakeLockHolder)
         gatewayServer?.start()
 
         startBackgroundDaemon()
-        AppLogger.d("Engine", "CoreServerService running on ports 45158 & 45161")
+        AppLogger.d("Engine", "CoreServerService gateway running on port ${BuildConfig.GATEWAY_PORT}")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

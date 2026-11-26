@@ -1050,7 +1050,7 @@ class AntigravityViewModel : ViewModel() {
 
             mutableSetupProgress.value = 0.90f
             mutableBootStatusText.value = "Starting Antigravity Core Service..."
-            addLog("Boot", "Launching CoreServerService (port 45158 & 45161)...")
+            addLog("Boot", "Launching CoreServerService...")
             startCoreService(context)
 
             delay(1000)

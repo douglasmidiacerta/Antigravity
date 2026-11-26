@@ -11,6 +11,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import id.vern.antigravity.BuildConfig
 import id.vern.antigravity.service.WakeLockHolder
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -22,7 +23,7 @@ import java.util.concurrent.Executors
 
 class SystemGatewayServer(
     private val context: Context,
-    private val port: Int = 45161,
+    private val port: Int = BuildConfig.GATEWAY_PORT,
     private val wakeLockHolder: WakeLockHolder? = null
 ) {
     companion object {

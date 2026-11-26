@@ -14,7 +14,7 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
 PREFIX = os.environ.get("PREFIX") or os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-HOME = os.environ.get("HOME") or os.path.dirname(PREFIX)
+HOME = os.environ.get("HOME") or os.path.join(os.path.dirname(PREFIX), "home")
 
 
 def application_id_from_prefix():
@@ -126,8 +126,8 @@ def run_task_worker(task):
     success = False
     output = ""
     env = os.environ.copy()
-    prefix = env.get("PREFIX", "/data/user/0/id.vern.antigravity/files/usr")
-    home = env.get("HOME", "/data/user/0/id.vern.antigravity/files/home")
+    prefix = env.get("PREFIX", PREFIX)
+    home = env.get("HOME", HOME)
     env["PATH"] = f"{prefix}/bin:{env.get('PATH', '')}"
     env["HOME"] = home
     if convo_id:
