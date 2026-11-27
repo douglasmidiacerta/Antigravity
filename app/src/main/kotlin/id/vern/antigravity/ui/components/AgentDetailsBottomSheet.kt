@@ -910,7 +910,7 @@ fun AgentDetailsBottomSheet(
                                 .padding(horizontal = 16.dp, vertical = 6.dp)
                         ) {
                             Text(
-                                text = "Review (${filteredFiles.size}/${filesChanged.size})",
+                                text = stringResource(R.string.ui_review_file_count, filteredFiles.size, filesChanged.size),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -984,7 +984,7 @@ fun AgentDetailsBottomSheet(
                                                 viewModel.clearGitDiffCache()
                                                 reloadWorkspaceData()
                                                 showReviewMoreMenu = false
-                                                Toast.makeText(context, "Workspace diff refreshed", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(context, context.getString(R.string.ui_workspace_diff_refreshed), Toast.LENGTH_SHORT).show()
                                             }
                                         )
                                         DropdownMenuItem(

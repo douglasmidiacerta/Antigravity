@@ -3,7 +3,7 @@
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:inset="15%">
     <bitmap
-        android:src="@drawable/ic_launcher_logo"
+        android:src="@drawable/ic_launcher_logo_negative"
         android:gravity="fill"
         android:filter="true" />
 </inset>

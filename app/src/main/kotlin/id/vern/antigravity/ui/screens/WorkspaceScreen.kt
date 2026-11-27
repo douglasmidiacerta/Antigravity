@@ -239,7 +239,7 @@ fun WorkspaceScreen(
                         } else {
                             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = "Select a file from the explorer to open in the editor",
+                                    text = stringResource(R.string.ui_select_file_hint),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
@@ -490,13 +490,13 @@ fun WorkspaceScreen(
                                         )
                                         Spacer(modifier = Modifier.height(12.dp))
                                         Text(
-                                            text = "No open files in editor",
+                                            text = stringResource(R.string.ui_no_editor_files),
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Text(
-                                            text = "Open the Files tab from the top toolbar to select a file.",
+                                            text = stringResource(R.string.ui_open_files_tab_hint),
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             textAlign = TextAlign.Center

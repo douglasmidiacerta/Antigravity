@@ -94,7 +94,7 @@ fun DiffViewer(
                     Spacer(modifier = Modifier.width(6.dp))
                     Column {
                         Text(
-                            text = "Diff: $fileName",
+                            text = stringResource(R.string.ui_file_diff, fileName),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold
                         )

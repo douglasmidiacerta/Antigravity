@@ -259,7 +259,7 @@ fun FormattedText(
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         context.startActivity(intent)
                     } catch (e: Exception) {
-                        Toast.makeText(context, "Cannot open: ${annotation.item}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_cannot_open, annotation.item), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
