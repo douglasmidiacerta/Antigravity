@@ -383,7 +383,7 @@ fun MainSettingsPage(
     ) {
 
         Text(
-            text = "Settings",
+            text = stringResource(R.string.settings_title),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
@@ -396,23 +396,23 @@ fun MainSettingsPage(
                 .verticalScroll(scrollState)
         ) {
             SettingsMenuRow(
-                title = "General",
+                title = stringResource(R.string.ui_general),
                 onClick = { onNavigateTo(SettingsPage.GENERAL) }
             )
             SettingsMenuRow(
-                title = "Appearance",
+                title = stringResource(R.string.ui_appearance),
                 onClick = { onNavigateTo(SettingsPage.APPEARANCE) }
             )
             SettingsMenuRow(
-                title = "Models",
+                title = stringResource(R.string.ui_models),
                 onClick = { onNavigateTo(SettingsPage.MODELS_AND_USAGE) }
             )
             SettingsMenuRow(
-                title = "Customizations",
+                title = stringResource(R.string.ui_customizations),
                 onClick = { onNavigateTo(SettingsPage.CUSTOMIZATIONS) }
             )
             SettingsMenuRow(
-                title = "Developer & System",
+                title = stringResource(R.string.ui_developer_system),
                 onClick = { onNavigateTo(SettingsPage.DEVELOPER) }
             )
             SettingsMenuRow(
@@ -985,8 +985,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "General",
-                    subtitle = "Configure agent execution, queued message delivery, and permissions.",
+                    title = stringResource(R.string.ui_general),
+                    subtitle = stringResource(R.string.ui_general_subtitle),
                     onBack = onBack
                 )
 
@@ -996,7 +996,7 @@ fun GeneralSettingsPage(
                         .verticalScroll(scrollState)
                 ) {
 
-                    SettingsSectionTitle(title = "Execution")
+                    SettingsSectionTitle(title = stringResource(R.string.ui_execution))
                     SettingsCard {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Text(
@@ -1005,7 +1005,7 @@ fun GeneralSettingsPage(
                                 fontWeight = FontWeight.SemiBold
                             )
                             Text(
-                                text = "Configure when follow-up messages are sent.",
+                                text = stringResource(R.string.ui_queued_subtitle),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -1018,7 +1018,7 @@ fun GeneralSettingsPage(
                                     .background(MaterialTheme.colorScheme.surfaceVariant)
                                     .padding(2.dp)
                             ) {
-                                listOf("Queue", "Send Immediately").forEach { opt ->
+                                listOf("Queue" to R.string.ui_queue, "Send Immediately" to R.string.ui_send_immediately).forEach { (opt, label) ->
                                     val selected = queuedMode == opt
                                     Surface(
                                         shape = RoundedCornerShape(6.dp),
@@ -1033,7 +1033,7 @@ fun GeneralSettingsPage(
                                             modifier = Modifier.padding(vertical = 8.dp)
                                         ) {
                                             Text(
-                                                text = opt,
+                                                text = stringResource(label),
                                                 style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                                                 color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
@@ -1075,7 +1075,7 @@ fun GeneralSettingsPage(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    SettingsSectionTitle(title = "Global Permissions")
+                    SettingsSectionTitle(title = stringResource(R.string.ui_global_permissions))
                     SettingsCard {
                         Column(modifier = Modifier.padding(14.dp)) {
 
@@ -1150,7 +1150,7 @@ fun GeneralSettingsPage(
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
-                                            text = "Tool Permissions",
+                                            text = stringResource(R.string.ui_tool_permissions),
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -1160,7 +1160,7 @@ fun GeneralSettingsPage(
                                         }
                                     }
                                     Text(
-                                        text = "Modify permissions for file, terminal, and MCP tools.",
+                                        text = stringResource(R.string.ui_tool_permissions_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1178,7 +1178,7 @@ fun GeneralSettingsPage(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    SettingsSectionTitle(title = "Agent Behavior")
+                    SettingsSectionTitle(title = stringResource(R.string.ui_agent_behavior))
                     SettingsCard {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Row(
@@ -1188,12 +1188,12 @@ fun GeneralSettingsPage(
                             ) {
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Text(
-                                        text = "Plan Review Policy",
+                                        text = stringResource(R.string.ui_plan_review_policy),
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold
                                     )
                                     Text(
-                                        text = "Determine when the agent should pause and ask you to review its plan.",
+                                        text = stringResource(R.string.ui_plan_review_policy_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1204,7 +1204,7 @@ fun GeneralSettingsPage(
                                         shape = RoundedCornerShape(8.dp),
                                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                                     ) {
-                                        Text(planReviewPolicy, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                                        Text(planReviewPolicyLabel(planReviewPolicy), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                                         Spacer(modifier = Modifier.width(4.dp))
                                         Icon(Icons.Default.ArrowDropDown, contentDescription = null, modifier = Modifier.size(16.dp))
                                     }
@@ -1216,7 +1216,7 @@ fun GeneralSettingsPage(
                                     ) {
                                         listOf("Always Ask", "Inherit Global", "Always Proceed").forEach { opt ->
                                             DropdownMenuItem(
-                                                text = { Text(opt, fontSize = 13.sp) },
+                                                text = { Text(planReviewPolicyLabel(opt), fontSize = 13.sp) },
                                                 onClick = {
                                                     viewModel.setPlanReviewPolicy(context, opt)
                                                     showPlanReviewMenu = false
@@ -1231,7 +1231,7 @@ fun GeneralSettingsPage(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    SettingsSectionTitle(title = "Network Permissions")
+                    SettingsSectionTitle(title = stringResource(R.string.ui_network_permissions))
                     SettingsCard {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Row(
@@ -1242,7 +1242,7 @@ fun GeneralSettingsPage(
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
-                                            text = "Network Access Rules",
+                                            text = stringResource(R.string.ui_network_access_rules),
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -1252,7 +1252,7 @@ fun GeneralSettingsPage(
                                         }
                                     }
                                     Text(
-                                        text = "Configure allowed and denied URLs for reading.",
+                                        text = stringResource(R.string.ui_network_permissions_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1285,8 +1285,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "Tool Permissions",
-                    subtitle = "Modify permissions for file, terminal, and MCP tools.",
+                    title = stringResource(R.string.ui_tool_permissions),
+                    subtitle = stringResource(R.string.ui_tool_permissions_subtitle),
                     onBack = { pageStack.removeAt(pageStack.lastIndex) }
                 )
 
@@ -1306,7 +1306,7 @@ fun GeneralSettingsPage(
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
-                                            text = "File Access Rules",
+                                            text = stringResource(R.string.ui_file_access_rules),
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -1317,7 +1317,7 @@ fun GeneralSettingsPage(
                                     }
                                     Spacer(modifier = Modifier.height(2.dp))
                                     Text(
-                                        text = "Configure allowed and denied paths for file reads and writes.",
+                                        text = stringResource(R.string.ui_file_access_rules_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1342,7 +1342,7 @@ fun GeneralSettingsPage(
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
-                                            text = "Terminal Commands",
+                                            text = stringResource(R.string.ui_terminal_commands),
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -1353,7 +1353,7 @@ fun GeneralSettingsPage(
                                     }
                                     Spacer(modifier = Modifier.height(2.dp))
                                     Text(
-                                        text = "Configure allowed terminal commands.",
+                                        text = stringResource(R.string.ui_terminal_commands_subtitle),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1378,7 +1378,7 @@ fun GeneralSettingsPage(
                                 Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Text(
-                                            text = "MCP Tools",
+                                            text = stringResource(R.string.ui_mcp_tools),
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -1389,7 +1389,7 @@ fun GeneralSettingsPage(
                                     }
                                     Spacer(modifier = Modifier.height(2.dp))
                                     Text(
-                                        text = "Configure external tools via Model Context Protocol.",
+                                        text = stringResource(R.string.ui_mcp_tools_configuration),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -1416,8 +1416,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "File Permissions",
-                    subtitle = "Configure allowed and denied paths for file reads and writes.",
+                    title = stringResource(R.string.ui_file_permissions),
+                    subtitle = stringResource(R.string.ui_file_access_rules_subtitle),
                     onBack = { pageStack.removeAt(pageStack.lastIndex) }
                 )
                 Column(
@@ -1426,10 +1426,10 @@ fun GeneralSettingsPage(
                         .verticalScroll(fileScrollState)
                 ) {
                     PermissionRulesCard(
-                        title = "File Reads",
-                        subtitle = "Allow/deny agent read access to specific files or directories.",
+                        title = stringResource(R.string.ui_file_reads),
+                        subtitle = stringResource(R.string.ui_file_reads_subtitle),
                         rules = permissionState.getRulesForAction("read_file"),
-                        placeholder = "e.g., /path/to/file",
+                        placeholder = stringResource(R.string.ui_file_path_example),
                         onAddRule = { pattern, mode ->
                             viewModel.addPermissionRule(context, "read_file", pattern, mode)
                         },
@@ -1444,10 +1444,10 @@ fun GeneralSettingsPage(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     PermissionRulesCard(
-                        title = "File Writes",
-                        subtitle = "Allow/deny agent write access to specific files or directories.",
+                        title = stringResource(R.string.ui_file_writes),
+                        subtitle = stringResource(R.string.ui_file_writes_subtitle),
                         rules = permissionState.getRulesForAction("write_file"),
-                        placeholder = "e.g., /path/to/file",
+                        placeholder = stringResource(R.string.ui_file_path_example),
                         onAddRule = { pattern, mode ->
                             viewModel.addPermissionRule(context, "write_file", pattern, mode)
                         },
@@ -1471,8 +1471,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "Terminal Commands",
-                    subtitle = "Configure allowed terminal commands.",
+                    title = stringResource(R.string.ui_terminal_commands),
+                    subtitle = stringResource(R.string.ui_terminal_commands_subtitle),
                     onBack = { pageStack.removeAt(pageStack.lastIndex) }
                 )
                 Column(
@@ -1481,10 +1481,10 @@ fun GeneralSettingsPage(
                         .verticalScroll(termScrollState)
                 ) {
                     PermissionRulesCard(
-                        title = "Terminal Commands",
-                        subtitle = "Allow/deny specific terminal commands.",
+                        title = stringResource(R.string.ui_terminal_commands),
+                        subtitle = stringResource(R.string.ui_terminal_rule_subtitle),
                         rules = permissionState.getRulesForAction("command"),
-                        placeholder = "e.g., npm test",
+                        placeholder = stringResource(R.string.ui_terminal_command_example),
                         onAddRule = { pattern, mode ->
                             viewModel.addPermissionRule(context, "command", pattern, mode)
                         },
@@ -1508,8 +1508,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "MCP Tools",
-                    subtitle = "External tools the agent can call via Model Context Protocol.",
+                    title = stringResource(R.string.ui_mcp_tools),
+                    subtitle = stringResource(R.string.ui_mcp_tool_permissions_subtitle),
                     onBack = { pageStack.removeAt(pageStack.lastIndex) }
                 )
                 Column(
@@ -1518,10 +1518,10 @@ fun GeneralSettingsPage(
                         .verticalScroll(mcpScrollState)
                 ) {
                     PermissionRulesCard(
-                        title = "MCP Tools",
-                        subtitle = "External tools the agent can call via Model Context Protocol.",
+                        title = stringResource(R.string.ui_mcp_tools),
+                        subtitle = stringResource(R.string.ui_mcp_tool_permissions_subtitle),
                         rules = permissionState.getRulesForAction("mcp"),
-                        placeholder = "Enter tool name or server...",
+                        placeholder = stringResource(R.string.ui_mcp_tool_name_hint),
                         onAddRule = { pattern, mode ->
                             viewModel.addPermissionRule(context, "mcp", pattern, mode)
                         },
@@ -1545,8 +1545,8 @@ fun GeneralSettingsPage(
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             ) {
                 SubSheetHeader(
-                    title = "Network Permissions",
-                    subtitle = "Configure allowed and denied URLs for reading.",
+                    title = stringResource(R.string.ui_network_permissions),
+                    subtitle = stringResource(R.string.ui_network_permissions_subtitle),
                     onBack = { pageStack.removeAt(pageStack.lastIndex) }
                 )
                 Column(
@@ -1555,10 +1555,10 @@ fun GeneralSettingsPage(
                         .verticalScroll(netScrollState)
                 ) {
                     PermissionRulesCard(
-                        title = "Read URLs",
-                        subtitle = "Allow/deny agent read access to specific URLs or domains.",
+                        title = stringResource(R.string.ui_read_urls),
+                        subtitle = stringResource(R.string.ui_read_urls_subtitle),
                         rules = permissionState.getRulesForAction("read_url"),
-                        placeholder = "e.g., https://example.com",
+                        placeholder = stringResource(R.string.ui_url_example),
                         onAddRule = { pattern, mode ->
                             viewModel.addPermissionRule(context, "read_url", pattern, mode)
                         },
@@ -1688,8 +1688,8 @@ fun ModelsAndUsageSettingsPage(
                 .padding(horizontal = 20.dp, vertical = 6.dp)
         ) {
             SubSheetHeader(
-                title = "Models & Usage",
-                subtitle = "Manage your model quota and account.",
+                title = stringResource(R.string.account_btn_models_usage),
+                subtitle = stringResource(R.string.ui_models_account_subtitle),
                 onBack = onBack
             )
 
@@ -1723,14 +1723,14 @@ fun ModelsAndUsageSettingsPage(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Sign In Required",
+                            text = stringResource(R.string.ui_sign_in_required),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Connect your Google account with OAuth 2.0 to access Gemini models, synchronize live usage, and view model quotas.",
+                            text = stringResource(R.string.ui_sign_in_required_subtitle),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -1759,15 +1759,15 @@ fun ModelsAndUsageSettingsPage(
             .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SubSheetHeader(
-            title = "Models & Usage",
-            subtitle = "Manage your model quota and credits.",
+            title = stringResource(R.string.account_btn_models_usage),
+            subtitle = stringResource(R.string.ui_models_credits_subtitle),
             onBack = onBack,
             trailingAction = {
                 IconButton(
                     onClick = {
                         viewModel.refreshUserQuota(context)
                         viewModel.refreshCliModels(context)
-                        Toast.makeText(context, "Refreshing live quota...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_refreshing_quota), Toast.LENGTH_SHORT).show()
                     }
                 ) {
                     Icon(
@@ -1800,7 +1800,7 @@ fun ModelsAndUsageSettingsPage(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "Fetching live model quota from Google Cloud Code...",
+                            text = stringResource(R.string.ui_fetching_quota),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1812,14 +1812,14 @@ fun ModelsAndUsageSettingsPage(
                 SettingsCard {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Quota Unavailable",
+                            text = stringResource(R.string.ui_quota_unavailable),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.error
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = quotaErrorMessage ?: "Check your connection or sign-in state.",
+                            text = quotaErrorMessage ?: stringResource(R.string.ui_check_connection),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -1845,7 +1845,7 @@ fun ModelsAndUsageSettingsPage(
                     codeAssistTier?.paidTier?.upgradeSubscriptionUri ?: ""
                 }
 
-                SettingsSectionTitle(title = "Plan")
+                SettingsSectionTitle(title = stringResource(R.string.ui_plan))
                 SettingsCard {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -1856,7 +1856,7 @@ fun ModelsAndUsageSettingsPage(
                     ) {
                         Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                             Text(
-                                text = "Your Plan: $planName",
+                                text = stringResource(R.string.ui_your_plan, planName),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -1894,7 +1894,7 @@ fun ModelsAndUsageSettingsPage(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            SettingsSectionTitle(title = "Model Credits")
+            SettingsSectionTitle(title = stringResource(R.string.ui_model_credits))
             SettingsCard {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Row(
@@ -1904,14 +1904,14 @@ fun ModelsAndUsageSettingsPage(
                     ) {
                         Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                             Text(
-                                text = "Enable AI Credit Overages",
+                                text = stringResource(R.string.ui_credit_overages),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Spacer(modifier = Modifier.height(3.dp))
                             Text(
-                                text = "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits.",
+                                text = stringResource(R.string.ui_credit_overages_subtitle),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 16.sp
@@ -1957,7 +1957,7 @@ fun ModelsAndUsageSettingsPage(
             } else if (!isQuotaLoading && quotaErrorMessage == null) {
                 SettingsCard {
                     Text(
-                        text = "No quota information available for this account.",
+                        text = stringResource(R.string.ui_quota_information_missing),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(14.dp)
@@ -2013,7 +2013,7 @@ fun ModelsAndUsageSettingsPage(
                     .groupBy { it.provider }
 
                 if (modelsByProvider.isNotEmpty()) {
-                    SettingsSectionTitle(title = "Models & Providers")
+                    SettingsSectionTitle(title = stringResource(R.string.ui_models_providers))
                     SettingsCard {
                         Column(modifier = Modifier.padding(14.dp)) {
                             modelsByProvider.entries.forEachIndexed { pIdx, (provider, modelsList) ->
@@ -2037,7 +2037,7 @@ fun ModelsAndUsageSettingsPage(
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
-                                        text = "$provider Models",
+                                        text = stringResource(R.string.ui_provider_models, provider),
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onSurface
@@ -2137,8 +2137,8 @@ fun CustomizationsSettingsPage(
             .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SubSheetHeader(
-            title = "Customizations",
-            subtitle = "Configure default behaviors, skills, and MCP servers. Learn more.",
+            title = stringResource(R.string.ui_customizations),
+            subtitle = stringResource(R.string.ui_customizations_subtitle),
             onBack = onBack
         )
 
@@ -2148,11 +2148,11 @@ fun CustomizationsSettingsPage(
                 .verticalScroll(scrollState)
         ) {
 
-            SettingsSectionTitle(title = "Token Usage")
+            SettingsSectionTitle(title = stringResource(R.string.ui_token_usage))
             SettingsCard {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text(
-                        text = "Context token footprint of loaded customizations.",
+                        text = stringResource(R.string.ui_token_usage_subtitle),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -2160,7 +2160,7 @@ fun CustomizationsSettingsPage(
 
                     val rulesPct = if (tokenStats.totalLimit > 0) (tokenStats.rulesTokens.toFloat() / tokenStats.totalLimit * 100f) else 0f
                     TokenUsageItem(
-                        label = "Rules",
+                        label = stringResource(R.string.settings_customization_rules_label),
                         usedTokens = tokenStats.rulesTokens,
                         totalTokens = tokenStats.totalLimit,
                         percentage = rulesPct,
@@ -2175,7 +2175,7 @@ fun CustomizationsSettingsPage(
 
                     val skillsPct = if (tokenStats.totalLimit > 0) (tokenStats.skillsTokens.toFloat() / tokenStats.totalLimit * 100f) else 0f
                     TokenUsageItem(
-                        label = "Skills",
+                        label = stringResource(R.string.settings_customization_skills_label),
                         usedTokens = tokenStats.skillsTokens,
                         totalTokens = tokenStats.totalLimit,
                         percentage = skillsPct,
@@ -2297,7 +2297,7 @@ fun CustomizationsSettingsPage(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "Installed MCP Servers",
+                        text = stringResource(R.string.ui_installed_mcp_servers),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -2311,7 +2311,7 @@ fun CustomizationsSettingsPage(
                     IconButton(
                         onClick = {
                             viewModel.refreshMcpServers(context)
-                            Toast.makeText(context, "MCP servers refreshed (${mcpServers.size})", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.ui_mcp_refreshed, mcpServers.size), Toast.LENGTH_SHORT).show()
                         },
                         modifier = Modifier.size(28.dp)
                     ) {
@@ -2354,14 +2354,14 @@ fun CustomizationsSettingsPage(
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = "No MCP servers installed",
+                                text = stringResource(R.string.ui_no_mcp_servers),
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Use Add MCP to configure a local tool or remote service, or edit mcp_config.json directly.",
+                                text = stringResource(R.string.ui_add_mcp_hint),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -2440,7 +2440,7 @@ fun CustomizationsSettingsPage(
                                             color = AntigravityGreen.copy(alpha = 0.15f)
                                         ) {
                                             Text(
-                                                text = "Active",
+                                                text = stringResource(R.string.account_active_badge),
                                                 fontSize = 10.sp,
                                                 fontWeight = FontWeight.Medium,
                                                 color = AntigravityGreen,
@@ -2459,7 +2459,7 @@ fun CustomizationsSettingsPage(
                                     )
                                     if (server.source != "Global") {
                                         Text(
-                                            text = "Source: ${server.source}",
+                                            text = stringResource(R.string.ui_mcp_source, server.source),
                                             fontSize = 10.sp,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                                         )
@@ -2492,10 +2492,10 @@ fun CustomizationsSettingsPage(
             onConfirm = { server ->
                 viewModel.saveMcpServer(context, server) { ok ->
                     if (ok) {
-                        Toast.makeText(context, "MCP server '${server.name}' configured!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_mcp_configured, server.name), Toast.LENGTH_SHORT).show()
                         showAddMcpDialog = false
                     } else {
-                        Toast.makeText(context, "Failed to configure MCP server", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_mcp_configuration_error), Toast.LENGTH_SHORT).show()
                     }
                 }
             },
@@ -2518,10 +2518,10 @@ fun CustomizationsSettingsPage(
                 onSave = { updatedJson ->
                     viewModel.saveRawMcpConfig(context, updatedJson) { ok ->
                         if (ok) {
-                            Toast.makeText(context, "mcp_config.json saved!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.ui_mcp_configuration_saved), Toast.LENGTH_SHORT).show()
                             showRawMcpConfigDialog = false
                         } else {
-                            Toast.makeText(context, "Invalid JSON format", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.ui_invalid_json), Toast.LENGTH_SHORT).show()
                         }
                     }
                 },
@@ -2574,17 +2574,17 @@ fun RulesManagementDialog(
             onSave = { updatedContent ->
                 viewModel.saveRuleContent(context, editingRule!!.filePath, updatedContent) { ok ->
                     if (ok) {
-                        Toast.makeText(context, "Rule saved successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_rule_saved), Toast.LENGTH_SHORT).show()
                         editingRule = null
                     } else {
-                        Toast.makeText(context, "Failed to save rule", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.ui_rule_save_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             },
             onDelete = {
                 viewModel.deleteRule(context, editingRule!!.filePath) { ok ->
                     if (ok) {
-                        Toast.makeText(context, "Rule deleted", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.settings_rules_deleted_toast), Toast.LENGTH_SHORT).show()
                         editingRule = null
                     }
                 }
@@ -2760,7 +2760,7 @@ fun RulesManagementDialog(
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "${rule.lineCount} lines • ${rule.byteSize} bytes • ${rule.filePath}",
+                                text = stringResource(R.string.ui_rule_metadata, rule.lineCount, rule.byteSize, rule.filePath),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 maxLines = 1,
@@ -3086,8 +3086,8 @@ fun AppearanceSettingsPage(
             .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SubSheetHeader(
-            title = "Appearance",
-            subtitle = "Customize theme mode, color presets, editor typography, and layout.",
+            title = stringResource(R.string.ui_appearance),
+            subtitle = stringResource(R.string.ui_appearance_subtitle),
             onBack = onBack
         )
 
@@ -3097,7 +3097,7 @@ fun AppearanceSettingsPage(
                 .verticalScroll(scrollState)
         ) {
 
-            SettingsSectionTitle(title = "Theme Mode")
+            SettingsSectionTitle(title = stringResource(R.string.ui_theme_mode))
             SettingsCard {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -3961,8 +3961,8 @@ fun DeveloperSettingsPage(
             .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         SubSheetHeader(
-            title = "Developer & System",
-            subtitle = "Runtime diagnostics, service status, and userspace management.",
+            title = stringResource(R.string.ui_developer_system),
+            subtitle = stringResource(R.string.ui_developer_system_subtitle),
             onBack = onBack
         )
 
@@ -5663,3 +5663,11 @@ fun AboutSettingsPage(
     }
 }
 
+
+@Composable
+private fun planReviewPolicyLabel(policy: String): String = when (policy) {
+    "Always Ask" -> stringResource(R.string.ui_always_ask)
+    "Inherit Global" -> stringResource(R.string.ui_inherit_global)
+    "Always Proceed" -> stringResource(R.string.ui_always_proceed)
+    else -> policy
+}

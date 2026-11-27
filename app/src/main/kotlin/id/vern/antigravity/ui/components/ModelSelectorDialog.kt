@@ -401,7 +401,7 @@ fun ModelSelectorDialog(
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         Text(
-                                            text = "$quotaPct% remaining",
+                                            text = stringResource(R.string.status_remaining_pct, quotaPct),
                                             style = MaterialTheme.typography.labelSmall,
                                             fontWeight = FontWeight.SemiBold,
                                             color = if (quotaPct > 20) AntigravityGreen else MaterialTheme.colorScheme.error
@@ -428,7 +428,7 @@ fun ModelSelectorDialog(
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         Text(
-                                            text = "Reasoning:",
+                                            text = stringResource(R.string.ui_reasoning),
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
@@ -605,7 +605,7 @@ fun UsageLimitsDialog(
                             ) {
                                 Column(modifier = Modifier.weight(1f).padding(end = 10.dp)) {
                                     Text(
-                                        text = "Your Plan: $planName",
+                                        text = stringResource(R.string.ui_your_plan, planName),
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onSurface
